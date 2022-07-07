@@ -1,0 +1,35 @@
+body {
+    background-color: #d8ecf3;
+    overflow-x: hidden;
+}
+
+.qualtrics {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 56.25%;
+    margin: 0 auto;
+}
+
+.frame {
+    position: absolute;
+    top: 3%;
+    left: 5%;
+    bottom: 0;
+    right: 0;
+    width: 90%;
+    height: 90%;
+}
+
+.text-title {
+    font-size: 2vw;
+}
+
+.text-feat {
+    font-size: 1.3vw;
+}
+
+#videoElement {
+    width: 100%;
+    height: auto;
+}

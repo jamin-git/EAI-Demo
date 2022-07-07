@@ -1,0 +1,102 @@
+<html>
+
+<head>
+  <title>MorphCast AI HTML5 SDK - Base example</title>
+  <meta name="mphtools-feature" content="compatibilityUI, cameraPrivacyPopup, compatibilityAutoCheck">
+
+  <!-- Bootstrap Initialization -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  </script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container-fluid">
+    <h1 style="padding-top: 2%; text-align: center;">Track Your Emotions!</h1>
+    <div class="row">
+      <div class="qualtrics">
+        <!-- Qualtrics Survey -->
+        <iframe class="frame" src="https://gatech.co1.qualtrics.com/jfe/form/SV_0PvWFaUyk7urx66"></iframe>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Morphcast Elements -->
+      <div class="col-7 d-flex justify-content-end">
+        <video autoplay="true" id="videoElement"></video>
+      </div>
+      <div class="col-5">
+        <div class="text-title"><b>Your Emotion</b></div>
+        <div id="age" class="text-feat">Age: -</div>
+        <div id="gender" class="text-feat">Gender: -</div>
+        <div id="emotion" class="text-feat">Emotion: -</div>
+        <div id="features" class="text-feat">Features: -</div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+  <!-- Scripts -->
+  <script src="https://sdk.morphcast.com/mphtools/v1.0/mphtools.js"></script>
+  <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
+  <script>
+    // Gathering the video Component
+    let video = document.querySelector("#videoElement");
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({
+          video: true
+        })
+        .then(function (stream) {
+          video.srcObject = stream;
+        })
+        .catch(function (error) {
+          console.log("Internal Error")
+        })
+    } else {
+      console.log("getUserMedia is not supported!");
+    }
+
+    // Loading Morphcast API
+    CY.loader()
+      .licenseKey("6e930223739a9e023afdeb414b629949dfb96526ec96")
+      .addModule(CY.modules().FACE_AGE.name)
+      .addModule(CY.modules().FACE_GENDER.name)
+      .addModule(CY.modules().FACE_EMOTION.name)
+      .addModule(CY.modules().FACE_FEATURES.name)
+      .load()
+      .then(({
+        start,
+        stop
+      }) => start());
+
+    const age_div = document.querySelector("#age");
+    const gen_div = document.querySelector("#gender");
+    const emo_div = document.querySelector("#emotion");
+    const feat_div = document.querySelector("#features");
+
+
+    window.addEventListener(CY.modules().FACE_AGE.eventName, (evt) => {
+      age_div.innerHTML = 'Age: ' + evt.detail.output.numericAge;
+    });
+
+    window.addEventListener(CY.modules().FACE_GENDER.eventName, (evt) => {
+      gen_div.innerHTML = 'Gender: ' + evt.detail.output.mostConfident;
+    });
+
+    window.addEventListener(CY.modules().FACE_EMOTION.eventName, (evt) => {
+      emo_div.innerHTML = 'Emotion: ' + evt.detail.output.dominantEmotion;
+    });
+  </script>
+</body>
+
+</html>
