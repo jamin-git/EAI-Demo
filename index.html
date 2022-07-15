@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <title>MorphCast AI HTML5 SDK - Base example</title>
+  <title>Price Your Emotions</title>
   <meta name="mphtools-feature" content="compatibilityUI, cameraPrivacyPopup, compatibilityAutoCheck">
 
   <!-- Bootstrap Initialization -->
@@ -12,20 +12,36 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div class="container-fluid">
     <h1 style="padding-top: 2%; text-align: center;">Track Your Emotions!</h1>
+    <p>Please fill out the embedded survey displayed below! After you submit, check your devices live read
+      on your emotion!
+    </p>
     <div class="row">
-      <div class="qualtrics">
-        <!-- Qualtrics Survey -->
-        <iframe class="frame" src="https://gatech.co1.qualtrics.com/jfe/form/SV_0PvWFaUyk7urx66"></iframe>
+      <div class="col-6">
+        <div class="qualtrics">
+          <!-- Qualtrics Survey -->
+          <iframe class="frame" src="https://gatech.co1.qualtrics.com/jfe/form/SV_0PvWFaUyk7urx66"></iframe>
+        </div>
+      </div>
+      <div class="col-6">
+        <div>
+          <video autoplay="true" id="videoElement" class="width: 35vw;
+          height: 35vw;"></video>
+        </div>
+        <div class="text-title"><b>Your Emotion</b></div>
+        <div id="age" class="text-feat">Age: -</div>
+        <div id="gender" class="text-feat">Gender: -</div>
+        <div id="emotion" class="text-feat">Emotion: -</div>
+        <div id="valence" class="text-feat">Valence: -</div>
       </div>
     </div>
-    <div class="row">
-      <!-- Morphcast Elements -->
+    <!-- <div class="row">
+      
       <div class="col-7 d-flex justify-content-end">
         <video autoplay="true" id="videoElement"></video>
       </div>
@@ -34,9 +50,9 @@
         <div id="age" class="text-feat">Age: -</div>
         <div id="gender" class="text-feat">Gender: -</div>
         <div id="emotion" class="text-feat">Emotion: -</div>
-        <div id="features" class="text-feat">Features: -</div>
+        <div id="valence" class="text-feat">Valence: -</div>
       </div>
-    </div>
+    </div> -->
   </div>
 
 
@@ -73,6 +89,7 @@
       .addModule(CY.modules().FACE_GENDER.name)
       .addModule(CY.modules().FACE_EMOTION.name)
       .addModule(CY.modules().FACE_FEATURES.name)
+      .addModule(CY.modules().FACE_AROUSAL_VALENCE.name)
       .load()
       .then(({
         start,
@@ -82,7 +99,7 @@
     const age_div = document.querySelector("#age");
     const gen_div = document.querySelector("#gender");
     const emo_div = document.querySelector("#emotion");
-    const feat_div = document.querySelector("#features");
+    const valence_div = document.querySelector("#valence");
 
 
     window.addEventListener(CY.modules().FACE_AGE.eventName, (evt) => {
@@ -95,6 +112,20 @@
 
     window.addEventListener(CY.modules().FACE_EMOTION.eventName, (evt) => {
       emo_div.innerHTML = 'Emotion: ' + evt.detail.output.dominantEmotion;
+    });
+    window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
+      let obj = evt.detail.output.affects98;
+      // let arr = [Afraid,	Amused,	Angry];
+      let result = obj.Afraid;
+      let resultNum = 0;
+      // for (let i = 0; i < 98; i++) {
+      //   if (result < obj.arr[1]) {
+      //     result = obj.arr[1];
+      //     resultNum = i;
+      //   }
+      // }
+      valence_div.innerHTML = 'Valence: ' + obj.Afraid;
+      
     });
   </script>
 </body>

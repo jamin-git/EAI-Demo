@@ -9,6 +9,7 @@ body {
     width: 100%;
     padding-top: 56.25%;
     margin: 0 auto;
+    height: 100%;
 }
 
 .frame {
@@ -18,7 +19,7 @@ body {
     bottom: 0;
     right: 0;
     width: 90%;
-    height: 90%;
+    height: 150%;
 }
 
 .text-title {
@@ -30,6 +31,6 @@ body {
 }
 
 #videoElement {
-    width: 100%;
-    height: auto;
+    width: 35vw;
+    height: 35vw;
 }
