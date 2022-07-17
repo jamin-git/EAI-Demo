@@ -55,7 +55,7 @@ body {
     display: none;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 1200px) {
     #videoElement {
         height: 40vw;
         width: auto;
