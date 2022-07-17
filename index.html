@@ -17,10 +17,28 @@
 
 <body>
   <div class="container-fluid">
+
     <h1 style="padding-top: 2%; text-align: center;">Track Your Emotions!</h1>
     <p>Please fill out the embedded survey displayed below! After you submit, check your devices live read
       on your emotion!
     </p>
+
+    <!-- Camera + Morphcast Input -->
+    <div id="emo-info" class="row toggle" style="padding-top: 2%;">
+      <div class="col d-flex justify-content-center">
+        <div class="emo-cont">
+          <video autoplay="true" id="videoElement"></video>
+        </div>
+        <div class="emo-cont">
+          <div class="text-title"><b>Your Emotion</b></div>
+          <div id="age" class="text-feat">Age: -</div>
+          <div id="gender" class="text-feat">Gender: -</div>
+          <div id="emotion" class="text-feat">Emotion: -</div>
+          <!-- <div id="valence" class="text-feat">Valence: -</div> -->
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col">
         <div class="qualtrics">
@@ -29,18 +47,8 @@
         </div>
       </div>
     </div>
-    <div class="row" style="padding-top: 3%;">
-      
-      <div class="col-7 d-flex justify-content-end">
-        <video autoplay="true" id="videoElement"></video>
-      </div>
-      <div class="col-5 emo-info">
-        <div class="text-title"><b>Your Emotion</b></div>
-        <div id="age" class="text-feat">Age: -</div>
-        <div id="gender" class="text-feat">Gender: -</div>
-        <div id="emotion" class="text-feat">Emotion: -</div>
-        <div id="valence" class="text-feat">Valence: -</div>
-      </div>
+    <div class="row d-flex justify-content-center" style="padding-left: 25%; padding-right: 25%; padding-bottom: 2%;">
+      <button id="toggle-button" onclick="toggleDisplay()" type="button" class="btn btn-primary btn-lg">Click Me After Completing First Page of Survey</button>
     </div>
   </div>
 
@@ -52,6 +60,21 @@
 
 
   <!-- Scripts -->
+
+  <script>
+    function toggleDisplay() {
+      var morph = document.getElementById("emo-info");
+      var but = document.getElementById("toggle-button");
+
+      morph.classList.toggle("toggle");
+      but.classList.toggle("toggle");
+
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }
+  </script>
+
+
+
   <script src="https://sdk.morphcast.com/mphtools/v1.0/mphtools.js"></script>
   <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
   <script>
@@ -114,7 +137,7 @@
       //   }
       // }
       valence_div.innerHTML = 'Valence: ' + obj.Afraid;
-      
+
     });
   </script>
 </body>

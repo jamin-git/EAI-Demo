@@ -1,6 +1,6 @@
 @media only screen and (max-width: 600px) {
     #videoElement {
-        height: 35vw;
+        height: 25vw;
         width: auto;
     }
 }
@@ -26,7 +26,7 @@ body {
     bottom: 0;
     right: 0;
     width: 90%;
-    height: 150%;
+    height: 90%;
 }
 
 .text-title {
@@ -38,9 +38,14 @@ body {
 }
 
 #videoElement {
-    width: 35vw;
+    width: 25vw;
 }
 
-.emo-info {
-    padding-top: 5%;
+.emo-cont {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.toggle {
+    display: none;
 }
