@@ -25,7 +25,8 @@
   <div class="container-fluid">
 
     <div class="text-container">
-      <h1 class="text-title" style="padding-top: 2%; text-align: center; padding-bottom: 2%;">The Emotion Marketplace <img src="img/scWhite.png" alt="shopping cart icon" width="100vw"height="auto"></h1>
+      <h1 class="text-title" style="padding-top: 2%; text-align: center; padding-bottom: 2%;">The Emotion Marketplace
+        <img src="img/scWhite.png" alt="shopping cart icon" width="100vw" height="auto"></h1>
       <p class="text-feat">Please follow the step-by-step instructions included below to track & sell your emotion.
       </p>
       <ol>
@@ -47,11 +48,14 @@
           <div id="age" class="text-feat">Age: -</div>
           <div id="gender" class="text-feat">Gender: -</div>
           <div id="emotion" class="text-feat">Emotion: -</div>
+          <div class="text-desc">
+            <span>Morphcast will timeout after 1 minute of use. To restart morphcast, please click <button class="button-restart" onclick="startMorphcast();" type="button">here</button></span>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="padding-top: 1%">
       <div class="col">
         <h1 class="text-title-2" style="padding-left: 2%">Qualtrics Survey</h1>
         <div class="qualtrics">
@@ -61,7 +65,7 @@
       </div>
     </div>
     <div class="row d-flex justify-content-center" style="padding-left: 25%; padding-right: 25%; padding-bottom: 2%;">
-      <button id="toggle-button" onclick="toggleDisplay()" type="button" class="btn btn-primary btn-lg">Click Me After
+      <button id="toggle-button" onclick="toggleDisplay(); startMorphcast();" type="button" class="btn btn-primary btn-lg">Click Me After
         Completing First Page of Survey</button>
     </div>
   </div>
@@ -92,6 +96,7 @@
   <script src="https://sdk.morphcast.com/mphtools/v1.0/mphtools.js"></script>
   <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
   <script>
+    
     // Gathering the video Component
     let video = document.querySelector("#videoElement");
     if (navigator.mediaDevices.getUserMedia) {
@@ -109,53 +114,45 @@
     }
 
     // Loading Morphcast API
-    CY.loader()
+    var initMorphcast = new Promise((res) => {
+          res(CY.loader()
+            // Jacob's Key "6e930223739a9e023afdeb414b629949dfb96526ec96"
+            // Noura's Key 
+            .licenseKey("a7a382459beb11f423b6d06cb0f8c6e03567a7d920a0")
+            .addModule(CY.modules().FACE_AGE.name)
+            .addModule(CY.modules().FACE_GENDER.name)
+            .addModule(CY.modules().FACE_EMOTION.name)
+            .addModule(CY.modules().FACE_FEATURES.name)
+            .load());
 
-    // Jacob's Key "6e930223739a9e023afdeb414b629949dfb96526ec96"
-    // Noura's Key 
-      .licenseKey("a7a382459beb11f423b6d06cb0f8c6e03567a7d920a0")
-      .addModule(CY.modules().FACE_AGE.name)
-      .addModule(CY.modules().FACE_GENDER.name)
-      .addModule(CY.modules().FACE_EMOTION.name)
-      .addModule(CY.modules().FACE_FEATURES.name)
-      .addModule(CY.modules().FACE_AROUSAL_VALENCE.name)
-      .load()
-      .then(({
-        start,
-        stop
-      }) => start());
-
-    const age_div = document.querySelector("#age");
-    const gen_div = document.querySelector("#gender");
-    const emo_div = document.querySelector("#emotion");
-    const valence_div = document.querySelector("#valence");
+            const age_div = document.querySelector("#age");
+            const gen_div = document.querySelector("#gender");
+            const emo_div = document.querySelector("#emotion");
 
 
-    window.addEventListener(CY.modules().FACE_AGE.eventName, (evt) => {
-      age_div.innerHTML = 'Age: ' + evt.detail.output.numericAge;
-    });
+            window.addEventListener(CY.modules().FACE_AGE.eventName, (evt) => {
+              age_div.innerHTML = 'Age: ' + evt.detail.output.numericAge;
+            });
 
-    window.addEventListener(CY.modules().FACE_GENDER.eventName, (evt) => {
-      gen_div.innerHTML = 'Gender: ' + evt.detail.output.mostConfident;
-    });
+            window.addEventListener(CY.modules().FACE_GENDER.eventName, (evt) => {
+              gen_div.innerHTML = 'Gender: ' + evt.detail.output.mostConfident;
+            });
 
-    window.addEventListener(CY.modules().FACE_EMOTION.eventName, (evt) => {
-      emo_div.innerHTML = 'Emotion: ' + evt.detail.output.dominantEmotion;
-    });
-    window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
-      let obj = evt.detail.output.affects98;
-      // let arr = [Afraid,	Amused,	Angry];
-      let result = obj.Afraid;
-      let resultNum = 0;
-      // for (let i = 0; i < 98; i++) {
-      //   if (result < obj.arr[1]) {
-      //     result = obj.arr[1];
-      //     resultNum = i;
-      //   }
-      // }
-      valence_div.innerHTML = 'Valence: ' + obj.Afraid;
+            window.addEventListener(CY.modules().FACE_EMOTION.eventName, (evt) => {
+              emo_div.innerHTML = 'Emotion: ' + evt.detail.output.dominantEmotion;
+            });
+          });
 
-    });
+        var startMorphcast = () => initMorphcast.then(({
+          start,
+          stop
+        }) => {
+          start();
+          setTimeout(stop, 60000);
+        });
+        var stopMorphcast = () => initMorphcast.then(({
+          stop
+        }) => stop());
   </script>
 </body>
 
